@@ -1,4 +1,4 @@
-Ladderable::Application.routes.draw do |map|
+Tournamentable::Application.routes.draw do |map|
   devise_for :users do
     resources :tournaments
     resources :rankings
