@@ -1,0 +1,12 @@
+<h1><%= @tournament.name %></h1>
+
+<p>Admin: <%= @tournament.owner.email %></p>
+
+<ol>
+  <% @tournament.users.each do |user| %>
+    <li><%= user.email %></li>
+  <% end %>
+</ol>
+
+<% if current_user == @tournament.owner %><%= link_to 'Edit', edit_tournament_path(@tournament) %> |<% end %>
+<%= link_to 'Back', tournaments_path %>

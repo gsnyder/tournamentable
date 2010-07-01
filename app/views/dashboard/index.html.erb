@@ -1,0 +1,21 @@
+<h2>Dashboard</h2>
+
+<% unless @rankings.blank? %>
+  <h3>Your rankings</h3>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Rank</th>
+    </tr>
+    <% @rankings.each do |ranking| %>
+      <tr>
+        <td><%= link_to ranking.tournament.name, ranking.tournament %></td>
+        <td><%= ranking.rank %></td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  It doesn't look like you have any tournaments. Try joining or creating one!
+<% end %>
+
+<p><%= link_to 'Create a new tournament', new_tournament_path %> or <%= link_to 'join a tournament', join_tournament_path %></p>
