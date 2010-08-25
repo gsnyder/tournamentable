@@ -4,8 +4,8 @@
 
 <h2>Competitors:</h2>
 <ol>
-  <% @tournament.users.each do |user| %>
-    <li><%= user.email %></li>
+  <% @tournament.rankings.each do |ranking| %>
+    <li><%= ranking.user.email %></li>
   <% end %>
 </ol>
 
