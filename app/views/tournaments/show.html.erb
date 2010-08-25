@@ -4,7 +4,7 @@
 
 <h2>Competitors:</h2>
 <ol>
-  <% @tournament.rankings.each do |ranking| %>
+  <% @tournament.rankings.sort!{ |a, b| a.rank.to_i <=> b.rank.to_i }.each do |ranking| %>
     <li><%= ranking.user.email %></li>
   <% end %>
 </ol>
