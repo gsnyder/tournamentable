@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  SPOTS_TO_CHALLENGE = 3
+
   has_many :rankings
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
@@ -18,6 +20,6 @@ class User < ActiveRecord::Base
 
     my_rank = Ranking.where(:tournament_id => ranking.tournament.id, :user_id => self.id).first
 
-    return ((my_rank.rank - ranking.rank) <= 3) && !(ranking.rank > my_rank.rank) ? true : false
+    return ((my_rank.rank - ranking.rank) <= SPOTS_TO_CHALLENGE) && !(ranking.rank > my_rank.rank) ? true : false
   end
 end
