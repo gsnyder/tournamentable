@@ -74,12 +74,26 @@ class TournamentsController < ApplicationController
   # DELETE /tournaments/1
   # DELETE /tournaments/1.xml
   def destroy
-    @tournament = Tournament.find(params[:id])
-    @tournament.destroy
+    tournament = Tournament.find(params[:id])
+    tournament.destroy
 
     respond_to do |format|
-      format.html { redirect_to(tournaments_url) }
+      format.html { redirect_to(tournaments_url, :notice => 'Tournament was deleted.') }
       format.xml  { head :ok }
+    end
+  end
+  
+  # GET /tournaments/1/join
+  def join
+    tournament = Tournament.find(params[:id])
+    ranking = Ranking.new(:user => current_user, :tournament => tournament)
+
+    respond_to do |format|
+      if ranking.save
+        format.html { redirect_to(tournament, :notice => "You've joined the tournament!") }
+      else
+        format.html { redirect_to(tournament, :notice => "Something's wrong. You can't join that tournament.") }
+      end
     end
   end
 end

@@ -16,8 +16,14 @@ Tournamentable::Application.routes.draw do |map|
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
-  resources :tournaments
-  resources :rankings
+  resources :tournaments do
+    member do
+      get :join
+    end
+    
+    resources :rankings
+    resources :matches
+  end
 
   # Sample resource route with options:
   #   resources :products do

@@ -5,9 +5,17 @@
 <h2>Competitors:</h2>
 <ol>
   <% @tournament.rankings.sort!{ |a, b| a.rank.to_i <=> b.rank.to_i }.each do |ranking| %>
-    <li><%= ranking.user.email %></li>
+    <li>
+      <%= ranking.user.email %>
+      <% if current_user.can_challenge?(ranking) %>
+        <%= link_to "Challenge", tournament_matches_path(@tournament, :match => {:incumbent_id => ranking.user.id, :challenger_id => current_user.id}), :method => :create %>
+      <% end %>
+    </li>
   <% end %>
 </ol>
 
+<p><%= link_to "Check out the matches happening!", tournament_matches_path(@tournament) %></p>
+
+<% unless @tournament.users.collect{|u| u.id }.include?(current_user.id) %><%= link_to 'Join', join_tournament_path(@tournament) %> |<% end %>
 <% if current_user == @tournament.owner %><%= link_to 'Edit', edit_tournament_path(@tournament) %> |<% end %>
 <%= link_to 'Back', tournaments_path %>

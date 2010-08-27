@@ -1,22 +1,29 @@
 <h1>Listing tournaments</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @tournaments.each do |tournament| %>
-  <tr>
-    <td><%= tournament.name %></td>
-    <td><%= link_to 'Show', tournament %></td>
-    <td><%= link_to 'Edit', edit_tournament_path(tournament) %></td>
-    <td><%= link_to 'Destroy', tournament, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<% if !@tournaments.blank? %>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <% @tournaments.each do |tournament| %>
+      <tr>
+        <td><%= link_to tournament.name, tournament %></td>
+        <% unless tournament.users.collect{|u| u.id }.include?(current_user.id) %>
+          <td><%= link_to 'Join', join_tournament_path(tournament) %></td>
+        <% end %>
+        <% if tournament.owner == current_user %>
+          <td><%= link_to 'Edit', edit_tournament_path(tournament) %></td>
+          <td><%= link_to 'Destroy', tournament, :confirm => 'Are you sure?', :method => :delete %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p>There are no tournaments available for you to join.</p>
 <% end %>
-</table>
 
 <br />
 

@@ -1,0 +1,22 @@
+<h1>Listing <%= @tournament.name %> matches</h1>
+
+<table>
+  <tr>
+    <th>Matchup</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @matches.each do |match| %>
+  <tr>
+    <td><%= match.incumbent %> vs. <%= match.challenger %></td>
+    <td><%= link_to 'Destroy', tournament_match_path(@tournament, match), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Match', new_tournament_match_path(@tournament) %> |
+<%= link_to 'Back', tournament_path(@tournament) %>
