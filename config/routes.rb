@@ -20,9 +20,12 @@ Tournamentable::Application.routes.draw do |map|
     member do
       get :join
     end
-    
-    resources :rankings
-    resources :matches
+
+    resources :matches do
+      member do
+        get :winner
+      end
+    end
   end
 
   # Sample resource route with options:

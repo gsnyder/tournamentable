@@ -1,22 +1,22 @@
-<h1>Listing <%= @tournament.name %> matches</h1>
+<h1>Listing <%= @tournament.name %>'s matches</h1>
 
-<table>
-  <tr>
-    <th>Matchup</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<% if !@matches.blank? %>
+  <table>
+    <tr>
+      <th>Match</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
 
-<% @matches.each do |match| %>
-  <tr>
-    <td><%= match.incumbent %> vs. <%= match.challenger %></td>
-    <td><%= link_to 'Destroy', tournament_match_path(@tournament, match), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+  <% @matches.each do |match| %>
+    <tr>
+      <td><%= link_to "#{match.incumbent.email} vs. #{match.challenger.email}", tournament_match_path(@tournament, match) %></td>
+    </tr>
+  <% end %>
+  </table>
+<% else %>
+  <p>There are currently no matches for this tournament.</p>
 <% end %>
-</table>
 
-<br />
-
-<%= link_to 'New Match', new_tournament_match_path(@tournament) %> |
 <%= link_to 'Back', tournament_path(@tournament) %>

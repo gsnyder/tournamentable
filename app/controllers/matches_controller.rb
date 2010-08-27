@@ -2,8 +2,8 @@ class MatchesController < ApplicationController
   # GET /tournament/:tournament_id/matches
   # GET /tournament/:tournament_id/matches.xml
   def index
-    @matches = Match.all
     @tournament = Tournament.find(params[:tournament_id])
+    @matches = Match.where(:tournament_id => @tournament.id).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,9 +14,10 @@ class MatchesController < ApplicationController
   # POST /tournament/:tournament_id/matches
   # POST /tournament/:tournament_id/matches.xml
   def create
-    @match = Match.new(params[:match])
     @tournament = Tournament.find(params[:tournament_id])
-
+    @match = Match.new(params[:match])
+    @match.tournament = @tournament
+    
     respond_to do |format|
       if @match.save
         format.html { redirect_to(@tournament, :notice => 'Match was successfully created.') }
@@ -25,6 +26,18 @@ class MatchesController < ApplicationController
         format.html { render :action => "new" }
         format.xml  { render :xml => @match.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+
+  # GET /tournament/:tournament_id/matches/1
+  # GET /tournament/:tournament_id/matches/1.xml
+  def show
+    @match = Match.find(params[:id])
+    @tournament = Tournament.find(params[:tournament_id])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @match }
     end
   end
 
@@ -56,6 +69,33 @@ class MatchesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(@tournament) }
       format.xml  { head :ok }
+    end
+  end
+
+  def winner
+    @match = Match.find(params[:id])
+    @tournament = Tournament.find(params[:tournament_id])
+    
+    respond_to do |format|
+      if params[:winner_id].to_i == @match.challenger.id
+        challenger_r = Ranking.where(:user_id => @match.challenger.id, :tournament_id => @tournament.id).first
+        incumbent_r = Ranking.where(:user_id => @match.incumbent.id, :tournament_id => @tournament.id).first
+        
+        challenger_r_rank = challenger_r.rank
+        incumbent_r_rank = incumbent_r.rank
+        
+        challenger_r.rank = incumbent_r_rank
+        incumbent_r.rank = challenger_r_rank
+        
+        challenger_r.save!
+        incumbent_r.save!
+        
+        @match.destroy
+
+        format.html { redirect_to(@tournament, :notice => "We have a new winner! The challenger has won and the rankings have changed.") }
+      else
+        format.html { redirect_to(@tournament, :notice => "We have a winner! The incumbent has won and the rankings have not changed.") }
+      end
     end
   end
 end
