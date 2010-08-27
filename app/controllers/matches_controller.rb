@@ -94,6 +94,8 @@ class MatchesController < ApplicationController
 
         format.html { redirect_to(@tournament, :notice => "We have a new winner! The challenger has won and the rankings have changed.") }
       else
+        @match.destroy
+
         format.html { redirect_to(@tournament, :notice => "We have a winner! The incumbent has won and the rankings have not changed.") }
       end
     end
