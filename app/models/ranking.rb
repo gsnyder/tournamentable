@@ -3,8 +3,10 @@ class Ranking < ActiveRecord::Base
   belongs_to :tournament
   
   validates_presence_of :tournament
-  validates_presence_of :user
+  validates_presence_of :user  
   
+  validates_uniqueness_of :user_id, :scope => [:tournament_id]
+
   before_create :inital_rank
   
   private
