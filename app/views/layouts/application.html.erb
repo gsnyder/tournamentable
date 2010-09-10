@@ -13,7 +13,7 @@
 
 <% if user_signed_in? -%>
   <div id="user_login_box">
-    Welcome, <%= current_user.email %>!
+    Welcome, <%= current_user.readable_name %> !
     <%= link_to 'Profile', edit_user_registration_path %>
     <%= link_to 'Sign out', destroy_user_session_path %>
   </div>

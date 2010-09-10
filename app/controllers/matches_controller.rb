@@ -1,10 +1,12 @@
 class MatchesController < ApplicationController
   # GET /tournament/:tournament_id/matches
   # GET /tournament/:tournament_id/matches.xml
+
+  
   def index
     @tournament = Tournament.find(params[:tournament_id])
-    @matches = Match.where(:tournament_id => @tournament.id).all
-
+    @matches = Match.where(:tournament_id => @tournament.id, :winner => nil).all
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @matches }
@@ -17,6 +19,14 @@ class MatchesController < ApplicationController
     @tournament = Tournament.find(params[:tournament_id])
     @match = Match.new(params[:match])
     @match.tournament = @tournament
+    
+    #send challenge email
+    challenger = User.find(params[:match][:challenger_id])
+    incumbent = User.find(params[:match][:incumbent_id])
+    body_hash = {:challenger => challenger.readable_name, 
+                 :incumbent => incumbent.readable_name,
+                 :tournament => @tournament.name}
+    Notification.deliver_challenge_email(challenger.email,[challenger.email,incumbent.email].map{|x| %{<#{x}>} if x}.join(','),"A Ping Pong Challenge Has been Requested",body_hash)
     
     respond_to do |format|
       if @match.save
@@ -46,7 +56,7 @@ class MatchesController < ApplicationController
   def update
     @match = Match.find(params[:id])
     @tournament = Tournament.find(params[:tournament_id])
-
+    
     respond_to do |format|
       if @match.update_attributes(params[:match])
         format.html { redirect_to(@tournament, :notice => 'Match was successfully updated.') }
@@ -75,6 +85,8 @@ class MatchesController < ApplicationController
   def winner
     @match = Match.find(params[:id])
     @tournament = Tournament.find(params[:tournament_id])
+    @match.winner = params[:winner_id]
+    @match.save!
     
     respond_to do |format|
       if params[:winner_id].to_i == @match.challenger.id
@@ -89,13 +101,9 @@ class MatchesController < ApplicationController
         
         challenger_r.save!
         incumbent_r.save!
-        
-        @match.destroy
 
         format.html { redirect_to(@tournament, :notice => "We have a new winner! The challenger has won and the rankings have changed.") }
       else
-        @match.destroy
-
         format.html { redirect_to(@tournament, :notice => "We have a winner! The incumbent has won and the rankings have not changed.") }
       end
     end

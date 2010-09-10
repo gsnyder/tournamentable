@@ -11,7 +11,7 @@
 
   <% @matches.each do |match| %>
     <tr>
-      <td><%= link_to "#{match.incumbent.email} vs. #{match.challenger.email}", tournament_match_path(@tournament, match) %></td>
+      <td><%= link_to "#{match.incumbent.readable_name} vs. #{match.challenger.readable_name}", tournament_match_path(@tournament, match) %></td>
     </tr>
   <% end %>
   </table>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100825174819) do
+ActiveRecord::Schema.define(:version => 20100909192157) do
 
   create_table "matches", :force => true do |t|
     t.integer  "tournament_id"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20100825174819) do
     t.string   "challenger_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "winner"
   end
 
   create_table "rankings", :force => true do |t|
@@ -49,6 +50,8 @@ ActiveRecord::Schema.define(:version => 20100825174819) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

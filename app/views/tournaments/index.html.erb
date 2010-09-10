@@ -10,7 +10,12 @@
     </tr>
     <% @tournaments.each do |tournament| %>
       <tr>
-        <td><%= link_to tournament.name, tournament %></td>
+        <td><% if tournament.users.collect{|u| u.id }.include?(current_user.id) %>
+	          <%= link_to tournament.name, tournament %>
+	        <% else %>
+	          <%= tournament.name %>
+	        <% end %>
+	    </td>
         <% unless tournament.users.collect{|u| u.id }.include?(current_user.id) %>
           <td><%= link_to 'Join', join_tournament_path(tournament) %></td>
         <% end %>

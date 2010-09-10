@@ -3,9 +3,9 @@
 <p>Once the match is complete, click on the winner!</p>
 
 <p>
-  <%= link_to @match.incumbent.email, winner_tournament_match_path(@tournament, @match, :winner_id => @match.incumbent.id), :confirm => "Was #{@match.incumbent.email} the winner?" %>
+  <%= link_to @match.incumbent.readable_name, winner_tournament_match_path(@tournament, @match, :winner_id => @match.incumbent.id), :confirm => "Was #{@match.incumbent.email} the winner?" %>
   vs.
-  <%= link_to @match.challenger.email, winner_tournament_match_path(@tournament, @match, :winner_id => @match.challenger.id), :confirm => "Was #{@match.challenger.email} the winner?" %>
+  <%= link_to @match.challenger.readable_name, winner_tournament_match_path(@tournament, @match, :winner_id => @match.challenger.id), :confirm => "Was #{@match.challenger.email} the winner?" %>
 </p>
 
 <%= link_to 'Back', tournament_matches_path(@tournament) %>

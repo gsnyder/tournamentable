@@ -1,12 +1,17 @@
 <h1><%= @tournament.name %></h1>
 
-<p>Admin: <%= @tournament.owner.email %></p>
+<p>Admin: <%= @tournament.owner.readable_name %></p>
 
 <h2>Competitors:</h2>
 <ol>
   <% @tournament.rankings.sort!{ |a, b| a.rank.to_i <=> b.rank.to_i }.each do |ranking| %>
     <li>
-      <%= ranking.user.email %>
+	  <%= ranking.user.readable_name %> (<%= ranking.user.wins(@tournament)%> - <%= ranking.user.losses(@tournament)%>) 
+
+      <!--<% unless current_user == ranking.user %>
+        (<%= current_user.wins_vs_opp(ranking.user.id,@tournament)%> - <%= current_user.losses_vs_opp(ranking.user.id,@tournament)%>)
+      <% end %>-->
+
       <% if current_user.can_challenge?(ranking) && current_user.match_with(ranking).blank? %>
         <%= link_to "Challenge", tournament_matches_path(@tournament, :match => {:incumbent_id => ranking.user.id, :challenger_id => current_user.id}), :method => :create %>
       <% elsif match = current_user.match_with(ranking) %>
